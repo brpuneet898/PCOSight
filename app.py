@@ -6,10 +6,16 @@ import joblib
 import pandas as pd
 import json
 import os
+from dotenv import load_dotenv
+from groq import Groq
+
+load_dotenv()
+groq_client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+GROQ_MODEL = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
 
 app = Flask(__name__)
 
-app.config["SECRET_KEY"] = "pcossight_secret_key"
+app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "pcossight_secret_key")
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///pcosight.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
@@ -68,6 +74,65 @@ def predict_advanced(input_data):
 
     return probability
 
+def generate_recommendations(prediction_type, probability, input_data):
+    risk_percent = round(probability * 100, 2)
+
+    prompt = f"""
+You are a women's health assistant for a PCOS screening portal.
+
+Generate personalized recommendations based on:
+Prediction type: {prediction_type}
+PCOS risk probability: {risk_percent}%
+User inputs: {json.dumps(input_data)}
+
+Return ONLY valid JSON in this exact format:
+{{
+  "good": ["point 1", "point 2"],
+  "bad": ["point 1", "point 2"],
+  "improve": ["point 1", "point 2"]
+}}
+
+Rules:
+- Each point must be one short bullet-level sentence.
+- Be specific to the user's inputs.
+- Do not diagnose PCOS.
+- Do not write long paragraphs.
+- Mention consulting a gynecologist only when risk or symptoms are notable.
+"""
+
+    try:
+        response = groq_client.chat.completions.create(
+            model=GROQ_MODEL,
+            messages=[
+                {
+                    "role": "system",
+                    "content": "You create short, safe, non-diagnostic health recommendations in JSON only."
+                },
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ],
+            temperature=0.3,
+            max_tokens=350
+        )
+
+        content = response.choices[0].message.content.strip()
+        recommendations = json.loads(content)
+
+        return {
+            "good": recommendations.get("good", [])[:2],
+            "bad": recommendations.get("bad", [])[:2],
+            "improve": recommendations.get("improve", [])[:2]
+        }
+
+    except Exception:
+        return {
+            "good": ["You completed the screening inputs properly."],
+            "bad": ["Some symptoms or lifestyle markers may need attention."],
+            "improve": ["Use this result as screening support and consult a doctor for confirmation."]
+        }
+
 
 # ---------------- HELPERS ----------------
 
@@ -81,7 +146,12 @@ def login_required(func):
     return wrapper
 
 
-def save_prediction(user_id, prediction_type, probability, input_data):
+def save_prediction(user_id, prediction_type, probability, input_data, recommendations):
+    payload = {
+        "inputs": input_data,
+        "recommendations": recommendations
+    }
+
     existing = PredictionResult.query.filter_by(
         user_id=user_id,
         prediction_type=prediction_type
@@ -89,13 +159,13 @@ def save_prediction(user_id, prediction_type, probability, input_data):
 
     if existing:
         existing.probability = probability
-        existing.input_data = json.dumps(input_data)
+        existing.input_data = json.dumps(payload)
     else:
         existing = PredictionResult(
             user_id=user_id,
             prediction_type=prediction_type,
             probability=probability,
-            input_data=json.dumps(input_data)
+            input_data=json.dumps(payload)
         )
         db.session.add(existing)
 
@@ -111,10 +181,20 @@ def get_prediction(user_id, prediction_type):
     if not result:
         return None
 
+    stored = json.loads(result.input_data)
+
+    if "inputs" in stored:
+        input_data = stored.get("inputs", {})
+        recommendations = stored.get("recommendations", {})
+    else:
+        input_data = stored
+        recommendations = {}
+
     return {
         "probability": result.probability,
         "percentage": round(result.probability * 100, 2),
-        "input_data": json.loads(result.input_data),
+        "input_data": input_data,
+        "recommendations": recommendations,
         "updated_at": result.updated_at
     }
 
@@ -206,7 +286,8 @@ def basic():
         }
 
         probability = predict_basic(input_data)
-        save_prediction(user_id, "basic", probability, input_data)
+        recommendations = generate_recommendations("basic", probability, input_data)
+        save_prediction(user_id, "basic", probability, input_data, recommendations)
 
         flash("Basic prediction updated successfully.", "success")
         return redirect(url_for("basic"))
@@ -240,7 +321,8 @@ def advanced():
         }
 
         probability = predict_advanced(input_data)
-        save_prediction(user_id, "advanced", probability, input_data)
+        recommendations = generate_recommendations("advanced", probability, input_data)
+        save_prediction(user_id, "advanced", probability, input_data, recommendations)
 
         flash("Advanced prediction updated successfully.", "success")
         return redirect(url_for("advanced"))
