@@ -8,26 +8,47 @@
 
 <body class="min-h-screen bg-gradient-to-br from-purple-50 via-rose-50 to-teal-50">
 
-  <nav class="bg-white shadow-sm px-8 py-5 flex justify-between items-center">
-    <h1 class="text-2xl font-bold text-purple-700">PCOSight</h1>
+<nav class="bg-white shadow-sm px-8 py-5 flex justify-between items-center">
+  <h1 class="text-2xl font-bold text-purple-700">PCOSight</h1>
 
-    <div class="flex items-center gap-4">
-      <span class="text-gray-600">Hi, {{ username }}</span>
-      <a href="{{ url_for('logout') }}"
-         class="bg-red-100 text-red-700 px-4 py-2 rounded-xl hover:bg-red-200 transition">
-        Logout
-      </a>
-    </div>
-  </nav>
+  <div class="flex items-center gap-4">
+    <span class="text-gray-600">Hi, {{ username }}</span>
+    <a href="{{ url_for('logout') }}" class="bg-red-100 text-red-700 px-4 py-2 rounded-xl hover:bg-red-200 transition">Logout</a>
+  </div>
+</nav>
 
-  <main class="max-w-6xl mx-auto px-8 py-16">
-    <div class="bg-white rounded-3xl shadow-xl p-10 border border-purple-100">
-      <h2 class="text-4xl font-bold text-gray-900 mb-4">Dashboard</h2>
-      <p class="text-gray-600">
-        Welcome to your PCOSight dashboard. Prediction forms, model results, explainability, and recommendations can be added here next.
+<main class="max-w-6xl mx-auto px-8 py-16">
+  <div class="mb-10">
+    <h2 class="text-4xl font-bold text-gray-900 mb-3">Your PCOSight Dashboard</h2>
+    <p class="text-gray-600">Choose a prediction mode or explore the research behind our experiments.</p>
+  </div>
+
+  <div class="grid md:grid-cols-3 gap-8">
+    <div class="bg-white rounded-3xl shadow-xl p-8 border border-purple-100">
+      <h3 class="text-2xl font-bold text-purple-700 mb-3">Basic Prediction</h3>
+      <p class="text-gray-600 mb-6">
+        Uses age, BMI, cycle regularity, symptoms, lifestyle, fast food intake, and exercise habits.
       </p>
+      <a href="{{ url_for('basic') }}" class="block text-center bg-purple-700 text-white py-3 rounded-xl hover:bg-purple-800 transition">Start Basic</a>
     </div>
-  </main>
+
+    <div class="bg-white rounded-3xl shadow-xl p-8 border border-rose-100">
+      <h3 class="text-2xl font-bold text-rose-700 mb-3">Advanced Prediction</h3>
+      <p class="text-gray-600 mb-6">
+        Adds hormonal and clinical features like AMH, LH, FSH, LH/FSH ratio, TSH, PRL, and RBS.
+      </p>
+      <a href="{{ url_for('advanced') }}" class="block text-center bg-rose-600 text-white py-3 rounded-xl hover:bg-rose-700 transition">Start Advanced</a>
+    </div>
+
+    <div class="bg-white rounded-3xl shadow-xl p-8 border border-teal-100">
+      <h3 class="text-2xl font-bold text-teal-700 mb-3">Research</h3>
+      <p class="text-gray-600 mb-6">
+        View the experiments, models, feature groups, and evaluation process used in PCOSight.
+      </p>
+      <a href="{{ url_for('research') }}" class="block text-center bg-teal-600 text-white py-3 rounded-xl hover:bg-teal-700 transition">View Research</a>
+    </div>
+  </div>
+</main>
 
 </body>
 </html>
