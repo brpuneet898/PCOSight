@@ -12,6 +12,7 @@ from groq import Groq
 load_dotenv()
 groq_client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 GROQ_MODEL = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
+CHATBOT_MODEL = os.getenv("CHATBOT_MODEL", "llama-3.1-8b-instant")
 
 app = Flask(__name__)
 
@@ -336,6 +337,53 @@ def advanced():
 def research():
     return render_template("research.html", username=session.get("username"))
 
+@app.route("/chatbot")
+@login_required
+def chatbot():
+    return render_template("chatbot.html", username=session.get("username"))
+
+
+@app.route("/chatbot_api", methods=["POST"])
+@login_required
+def chatbot_api():
+    data = request.get_json()
+    user_message = data.get("message", "").strip()
+
+    if not user_message:
+        return {"answer": "Please ask a valid PCOS-related question."}
+
+    try:
+        response = groq_client.chat.completions.create(
+            model=CHATBOT_MODEL,
+            messages=[
+                {
+                    "role": "system",
+                    "content": """
+You are PCOS CareChat, an educational assistant for PCOSight.
+
+Rules:
+- Answer only questions related to PCOS, menstrual health, reproductive health, symptoms, lifestyle, screening, hormones, fertility, and general women's health.
+- If the question is unrelated, politely say you can only answer PCOS and reproductive-health-related questions.
+- Keep answers simple, short, and clear.
+- Do not diagnose.
+- Do not prescribe medicines.
+- Encourage consulting a gynecologist for severe symptoms, pregnancy concerns, abnormal bleeding, or high-risk health issues.
+"""
+                },
+                {
+                    "role": "user",
+                    "content": user_message
+                }
+            ],
+            temperature=0.4,
+            max_tokens=300
+        )
+
+        answer = response.choices[0].message.content.strip()
+        return {"answer": answer}
+
+    except Exception:
+        return {"answer": "Sorry, I could not generate an answer right now. Please try again."}
 
 @app.route("/logout")
 def logout():
