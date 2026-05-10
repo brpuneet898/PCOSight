@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PCOSight</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen bg-gradient-to-br from-rose-50 via-purple-50 to-teal-50 text-gray-800">
+
+  <nav class="px-8 py-6 flex justify-between items-center">
+    <h1 class="text-2xl font-bold text-purple-700">PCOSight</h1>
+    <a href="{{ url_for('login') }}" class="text-purple-700 font-medium hover:underline">Login</a>
+  </nav>
+
+  <section class="max-w-6xl mx-auto px-8 py-20 grid md:grid-cols-2 gap-12 items-center">
+    <div>
+      <p class="text-sm uppercase tracking-widest text-teal-600 font-semibold mb-4">
+        AI-Powered Women’s Health Support
+      </p>
+
+      <h2 class="text-5xl font-extrabold leading-tight text-gray-900 mb-6">
+        PCOSight
+      </h2>
+
+      <p class="text-xl text-gray-700 mb-5">
+        An AI-powered decision support tool for early PCOS risk prediction and reproductive health assessment.
+      </p>
+
+      <p class="text-gray-600 leading-relaxed mb-8">
+        PCOSight utilizes machine learning and deep learning models to analyze clinical, lifestyle, and hormonal parameters for estimating PCOS risk. The platform provides explainable predictions, personalized recommendations, and educational insights to support early screening and informed healthcare decisions.
+      </p>
+
+      <a href="{{ url_for('login') }}"
+         class="inline-block bg-purple-700 text-white px-8 py-3 rounded-xl shadow-lg hover:bg-purple-800 transition">
+        Explore
+      </a>
+    </div>
+
+    <div class="bg-white/80 backdrop-blur p-8 rounded-3xl shadow-xl border border-purple-100">
+      <div class="grid grid-cols-2 gap-5">
+        <div class="p-5 bg-rose-50 rounded-2xl">
+          <h3 class="font-bold text-rose-700 mb-2">Clinical Inputs</h3>
+          <p class="text-sm text-gray-600">Age, BMI, cycle regularity, and symptoms.</p>
+        </div>
+
+        <div class="p-5 bg-purple-50 rounded-2xl">
+          <h3 class="font-bold text-purple-700 mb-2">AI Prediction</h3>
+          <p class="text-sm text-gray-600">ML and DL powered risk estimation.</p>
+        </div>
+
+        <div class="p-5 bg-teal-50 rounded-2xl">
+          <h3 class="font-bold text-teal-700 mb-2">Explainability</h3>
+          <p class="text-sm text-gray-600">Clear insights behind each prediction.</p>
+        </div>
+
+        <div class="p-5 bg-pink-50 rounded-2xl">
+          <h3 class="font-bold text-pink-700 mb-2">Recommendations</h3>
+          <p class="text-sm text-gray-600">Personalized lifestyle and health guidance.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>
