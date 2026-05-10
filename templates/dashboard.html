@@ -20,16 +20,19 @@
 <main class="max-w-6xl mx-auto px-8 py-16">
   <div class="mb-10">
     <h2 class="text-4xl font-bold text-gray-900 mb-3">Your PCOSight Dashboard</h2>
-    <p class="text-gray-600">Choose a prediction mode or explore the research behind our experiments.</p>
+    <p class="text-gray-600">Choose a prediction mode, explore research, or ask PCOS-related questions.</p>
   </div>
 
-  <div class="grid md:grid-cols-3 gap-8">
+  <div class="grid md:grid-cols-2 gap-8">
+
     <div class="bg-white rounded-3xl shadow-xl p-8 border border-purple-100">
       <h3 class="text-2xl font-bold text-purple-700 mb-3">Basic Prediction</h3>
       <p class="text-gray-600 mb-6">
         Uses age, BMI, cycle regularity, symptoms, lifestyle, fast food intake, and exercise habits.
       </p>
-      <a href="{{ url_for('basic') }}" class="block text-center bg-purple-700 text-white py-3 rounded-xl hover:bg-purple-800 transition">Start Basic</a>
+      <a href="{{ url_for('basic') }}" class="block text-center bg-purple-700 text-white py-3 rounded-xl hover:bg-purple-800 transition">
+        Start Basic
+      </a>
     </div>
 
     <div class="bg-white rounded-3xl shadow-xl p-8 border border-rose-100">
@@ -37,7 +40,9 @@
       <p class="text-gray-600 mb-6">
         Adds hormonal and clinical features like AMH, LH, FSH, LH/FSH ratio, TSH, PRL, and RBS.
       </p>
-      <a href="{{ url_for('advanced') }}" class="block text-center bg-rose-600 text-white py-3 rounded-xl hover:bg-rose-700 transition">Start Advanced</a>
+      <a href="{{ url_for('advanced') }}" class="block text-center bg-rose-600 text-white py-3 rounded-xl hover:bg-rose-700 transition">
+        Start Advanced
+      </a>
     </div>
 
     <div class="bg-white rounded-3xl shadow-xl p-8 border border-teal-100">
@@ -45,8 +50,21 @@
       <p class="text-gray-600 mb-6">
         View the experiments, models, feature groups, and evaluation process used in PCOSight.
       </p>
-      <a href="{{ url_for('research') }}" class="block text-center bg-teal-600 text-white py-3 rounded-xl hover:bg-teal-700 transition">View Research</a>
+      <a href="{{ url_for('research') }}" class="block text-center bg-teal-600 text-white py-3 rounded-xl hover:bg-teal-700 transition">
+        View Research
+      </a>
     </div>
+
+    <div class="bg-white rounded-3xl shadow-xl p-8 border border-pink-100">
+      <h3 class="text-2xl font-bold text-pink-700 mb-3">PCOS CareChat</h3>
+      <p class="text-gray-600 mb-6">
+        Ask simple questions about PCOS symptoms, lifestyle, reproductive health, screening, and general awareness.
+      </p>
+      <a href="{{ url_for('chatbot') }}" class="block text-center bg-pink-600 text-white py-3 rounded-xl hover:bg-pink-700 transition">
+        Open CareChat
+      </a>
+    </div>
+
   </div>
 </main>
 
