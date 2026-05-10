@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PCOS CareChat | PCOSight</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen bg-gradient-to-br from-purple-50 via-rose-50 to-teal-50">
+
+<nav class="bg-white shadow-sm px-8 py-5 flex justify-between items-center">
+  <h1 class="text-2xl font-bold text-purple-700">PCOSight</h1>
+
+  <div class="flex gap-4">
+    <a href="{{ url_for('dashboard') }}" class="bg-purple-100 text-purple-700 px-4 py-2 rounded-xl hover:bg-purple-200">Dashboard</a>
+    <a href="{{ url_for('logout') }}" class="bg-red-100 text-red-700 px-4 py-2 rounded-xl hover:bg-red-200">Logout</a>
+  </div>
+</nav>
+
+<main class="max-w-5xl mx-auto px-8 py-12">
+
+  <div class="mb-8">
+    <h2 class="text-4xl font-bold text-gray-900 mb-3">PCOS CareChat</h2>
+    <p class="text-gray-600">
+      Ask PCOS-related questions only. This chatbot provides simple educational guidance, not medical diagnosis.
+    </p>
+  </div>
+
+  <div class="bg-white rounded-3xl shadow-xl border border-pink-100 overflow-hidden">
+
+    <div id="chatBox" class="h-[520px] overflow-y-auto p-6 space-y-5 bg-white">
+      <div class="flex justify-start">
+        <div class="max-w-[75%] bg-pink-50 border border-pink-100 text-gray-700 px-5 py-3 rounded-2xl">
+          Hi, I am PCOS CareChat. Ask me anything related to PCOS, symptoms, lifestyle, screening, or reproductive health.
+        </div>
+      </div>
+    </div>
+
+    <div class="border-t p-5 bg-gray-50">
+      <form id="chatForm" class="flex gap-3">
+        <input
+          id="userMessage"
+          type="text"
+          placeholder="Ask a PCOS-related question..."
+          class="flex-1 p-4 border rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-300"
+          required
+        >
+        <button
+          type="submit"
+          class="bg-pink-600 text-white px-7 py-3 rounded-xl hover:bg-pink-700 transition">
+          Send
+        </button>
+      </form>
+
+      <p class="text-xs text-gray-500 mt-3">
+        Chats are temporary and will be cleared when the session ends.
+      </p>
+    </div>
+
+  </div>
+
+</main>
+
+<script>
+  const chatForm = document.getElementById("chatForm");
+  const userMessage = document.getElementById("userMessage");
+  const chatBox = document.getElementById("chatBox");
+
+  function addMessage(message, sender) {
+    const wrapper = document.createElement("div");
+    wrapper.className = sender === "user" ? "flex justify-end" : "flex justify-start";
+
+    const bubble = document.createElement("div");
+    bubble.className = sender === "user"
+      ? "max-w-[75%] bg-purple-700 text-white px-5 py-3 rounded-2xl"
+      : "max-w-[75%] bg-pink-50 border border-pink-100 text-gray-700 px-5 py-3 rounded-2xl";
+
+    bubble.innerText = message;
+    wrapper.appendChild(bubble);
+    chatBox.appendChild(wrapper);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+
+  chatForm.addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    const message = userMessage.value.trim();
+    if (!message) return;
+
+    addMessage(message, "user");
+    userMessage.value = "";
+
+    addMessage("Thinking...", "bot");
+    const thinkingBubble = chatBox.lastChild;
+
+    try {
+      const response = await fetch("{{ url_for('chatbot_api') }}", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ message })
+      });
+
+      const data = await response.json();
+      thinkingBubble.remove();
+
+      if (data.answer) {
+        addMessage(data.answer, "bot");
+      } else {
+        addMessage("Sorry, I could not answer that right now.", "bot");
+      }
+
+    } catch (error) {
+      thinkingBubble.remove();
+      addMessage("Something went wrong. Please try again.", "bot");
+    }
+  });
+</script>
+
+</body>
+</html>
