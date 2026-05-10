@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Research | PCOSight</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen bg-gradient-to-br from-purple-50 via-rose-50 to-teal-50">
+
+<nav class="bg-white shadow-sm px-8 py-5 flex justify-between items-center">
+  <h1 class="text-2xl font-bold text-purple-700">PCOSight</h1>
+  <div class="flex gap-4">
+    <a href="{{ url_for('dashboard') }}" class="bg-purple-100 text-purple-700 px-4 py-2 rounded-xl hover:bg-purple-200">Dashboard</a>
+    <a href="{{ url_for('logout') }}" class="bg-red-100 text-red-700 px-4 py-2 rounded-xl hover:bg-red-200">Logout</a>
+  </div>
+</nav>
+
+<main class="max-w-6xl mx-auto px-8 py-16">
+  <div class="bg-white rounded-3xl shadow-xl p-10 border border-teal-100">
+    <h2 class="text-4xl font-bold text-gray-900 mb-4">Research & Experiments</h2>
+
+    <p class="text-gray-600 mb-8">
+      PCOSight was developed by comparing multiple machine learning and deep learning approaches for early PCOS risk prediction.
+    </p>
+
+    <div class="grid md:grid-cols-2 gap-8">
+      <div class="p-6 bg-purple-50 rounded-2xl">
+        <h3 class="text-xl font-bold text-purple-700 mb-3">Basic Experiment</h3>
+        <p class="text-gray-600">
+          The basic setup uses easily available features such as age, BMI, menstrual cycle regularity, symptoms, fast food intake, and exercise habits.
+        </p>
+      </div>
+
+      <div class="p-6 bg-rose-50 rounded-2xl">
+        <h3 class="text-xl font-bold text-rose-700 mb-3">Advanced Experiment</h3>
+        <p class="text-gray-600">
+          The advanced setup includes additional hormonal and biochemical parameters such as AMH, LH, FSH, LH/FSH ratio, TSH, PRL, and RBS.
+        </p>
+      </div>
+
+      <div class="p-6 bg-teal-50 rounded-2xl">
+        <h3 class="text-xl font-bold text-teal-700 mb-3">Models Tested</h3>
+        <p class="text-gray-600">
+          Logistic Regression, Random Forest, SVM, and Artificial Neural Networks were explored for risk prediction.
+        </p>
+      </div>
+
+      <div class="p-6 bg-pink-50 rounded-2xl">
+        <h3 class="text-xl font-bold text-pink-700 mb-3">Final Inference</h3>
+        <p class="text-gray-600">
+          The portal uses a Basic ANN model for basic prediction and an Advanced Random Forest model for advanced prediction.
+        </p>
+      </div>
+    </div>
+  </div>
+</main>
+
+</body>
+</html>
