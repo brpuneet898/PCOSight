@@ -1,6 +1,11 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from werkzeug.security import generate_password_hash, check_password_hash
-from models import db, User
+from models import db, User, PredictionResult
+from functools import wraps
+import joblib
+import pandas as pd
+import json
+import os
 
 app = Flask(__name__)
 
@@ -13,6 +18,108 @@ db.init_app(app)
 with app.app_context():
     db.create_all()
 
+
+# ---------------- MODEL LOADING ----------------
+
+basic_model = None
+basic_scaler = None
+basic_features = None
+
+adv_model = None
+adv_features = None
+
+
+def load_basic_assets():
+    global basic_model, basic_scaler, basic_features
+
+    if basic_model is None:
+        basic_model = joblib.load("saved_models/basic_lr_model.pkl")
+        basic_scaler = joblib.load("saved_models/basic_lr_scaler.pkl")
+        basic_features = joblib.load("saved_models/basic_lr_features.pkl")
+
+
+def load_advanced_assets():
+    global adv_model, adv_features
+
+    if adv_model is None:
+        adv_model = joblib.load("saved_models/advanced_rf_model.pkl")
+        adv_features = joblib.load("saved_models/advanced_rf_features.pkl")
+
+
+def predict_basic(input_data):
+    load_basic_assets()
+
+    df = pd.DataFrame([input_data])
+    df = df[basic_features]
+
+    scaled = basic_scaler.transform(df)
+    probability = float(basic_model.predict_proba(scaled)[0][1])
+
+    return probability
+
+
+def predict_advanced(input_data):
+    load_advanced_assets()
+
+    df = pd.DataFrame([input_data])
+    df = df[adv_features]
+
+    probability = float(adv_model.predict_proba(df)[0][1])
+
+    return probability
+
+
+# ---------------- HELPERS ----------------
+
+def login_required(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if "user_id" not in session:
+            flash("Please login first.", "error")
+            return redirect(url_for("login"))
+        return func(*args, **kwargs)
+    return wrapper
+
+
+def save_prediction(user_id, prediction_type, probability, input_data):
+    existing = PredictionResult.query.filter_by(
+        user_id=user_id,
+        prediction_type=prediction_type
+    ).first()
+
+    if existing:
+        existing.probability = probability
+        existing.input_data = json.dumps(input_data)
+    else:
+        existing = PredictionResult(
+            user_id=user_id,
+            prediction_type=prediction_type,
+            probability=probability,
+            input_data=json.dumps(input_data)
+        )
+        db.session.add(existing)
+
+    db.session.commit()
+
+
+def get_prediction(user_id, prediction_type):
+    result = PredictionResult.query.filter_by(
+        user_id=user_id,
+        prediction_type=prediction_type
+    ).first()
+
+    if not result:
+        return None
+
+    return {
+        "probability": result.probability,
+        "percentage": round(result.probability * 100, 2),
+        "input_data": json.loads(result.input_data),
+        "updated_at": result.updated_at
+    }
+
+
+# ---------------- ROUTES ----------------
 
 @app.route("/")
 def index():
@@ -30,13 +137,11 @@ def register():
             flash("All fields are required.", "error")
             return redirect(url_for("register"))
 
-        existing_email = User.query.filter_by(email=email).first()
-        if existing_email:
+        if User.query.filter_by(email=email).first():
             flash("Email already registered. Please login.", "error")
             return redirect(url_for("register"))
 
-        existing_username = User.query.filter_by(username=username).first()
-        if existing_username:
+        if User.query.filter_by(username=username).first():
             flash("Username already taken. Please choose another.", "error")
             return redirect(url_for("register"))
 
@@ -76,12 +181,78 @@ def login():
 
 
 @app.route("/dashboard")
+@login_required
 def dashboard():
-    if "user_id" not in session:
-        flash("Please login first.", "error")
-        return redirect(url_for("login"))
-
     return render_template("dashboard.html", username=session.get("username"))
+
+
+@app.route("/basic", methods=["GET", "POST"])
+@login_required
+def basic():
+    user_id = session["user_id"]
+
+    if request.method == "POST":
+        input_data = {
+            "Age (yrs)": float(request.form["age"]),
+            "BMI": float(request.form["bmi"]),
+            "Cycle(R/I)": int(request.form["cycle"]),
+            "Pimples(Y/N)": int(request.form["pimples"]),
+            "hair growth(Y/N)": int(request.form["hair_growth"]),
+            "Hair loss(Y/N)": int(request.form["hair_loss"]),
+            "Weight gain(Y/N)": int(request.form["weight_gain"]),
+            "Skin darkening (Y/N)": int(request.form["skin_darkening"]),
+            "Fast food (Y/N)": int(request.form["fast_food"]),
+            "Reg.Exercise(Y/N)": int(request.form["regular_exercise"])
+        }
+
+        probability = predict_basic(input_data)
+        save_prediction(user_id, "basic", probability, input_data)
+
+        flash("Basic prediction updated successfully.", "success")
+        return redirect(url_for("basic"))
+
+    result = get_prediction(user_id, "basic")
+    return render_template("basic.html", username=session.get("username"), result=result)
+
+
+@app.route("/advanced", methods=["GET", "POST"])
+@login_required
+def advanced():
+    user_id = session["user_id"]
+
+    if request.method == "POST":
+        input_data = {
+            "Age (yrs)": float(request.form["age"]),
+            "BMI": float(request.form["bmi"]),
+            "Cycle(R/I)": int(request.form["cycle"]),
+            "Pimples(Y/N)": int(request.form["pimples"]),
+            "hair growth(Y/N)": int(request.form["hair_growth"]),
+            "Hair loss(Y/N)": int(request.form["hair_loss"]),
+            "Weight gain(Y/N)": int(request.form["weight_gain"]),
+            "Skin darkening (Y/N)": int(request.form["skin_darkening"]),
+            "AMH(ng/mL)": float(request.form["amh"]),
+            "LH(mIU/mL)": float(request.form["lh"]),
+            "FSH(mIU/mL)": float(request.form["fsh"]),
+            "LH_FSH_Ratio": float(request.form["lh_fsh_ratio"]),
+            "TSH (mIU/L)": float(request.form["tsh"]),
+            "PRL(ng/mL)": float(request.form["prl"]),
+            "RBS(mg/dl)": float(request.form["rbs"])
+        }
+
+        probability = predict_advanced(input_data)
+        save_prediction(user_id, "advanced", probability, input_data)
+
+        flash("Advanced prediction updated successfully.", "success")
+        return redirect(url_for("advanced"))
+
+    result = get_prediction(user_id, "advanced")
+    return render_template("advanced.html", username=session.get("username"), result=result)
+
+
+@app.route("/research")
+@login_required
+def research():
+    return render_template("research.html", username=session.get("username"))
 
 
 @app.route("/logout")
