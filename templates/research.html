@@ -6,55 +6,262 @@
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="min-h-screen bg-gradient-to-br from-purple-50 via-rose-50 to-teal-50">
+<body class="min-h-screen bg-gradient-to-br from-purple-50 via-rose-50 to-teal-50 text-gray-800">
 
-<nav class="bg-white shadow-sm px-8 py-5 flex justify-between items-center">
+<nav class="bg-white/90 backdrop-blur shadow-sm px-8 py-5 flex justify-between items-center sticky top-0 z-50">
   <h1 class="text-2xl font-bold text-purple-700">PCOSight</h1>
+
   <div class="flex gap-4">
-    <a href="{{ url_for('dashboard') }}" class="bg-purple-100 text-purple-700 px-4 py-2 rounded-xl hover:bg-purple-200">Dashboard</a>
-    <a href="{{ url_for('logout') }}" class="bg-red-100 text-red-700 px-4 py-2 rounded-xl hover:bg-red-200">Logout</a>
+    <a href="{{ url_for('dashboard') }}"
+       class="bg-purple-100 text-purple-700 px-4 py-2 rounded-xl hover:bg-purple-200 transition">
+      Dashboard
+    </a>
+    <a href="{{ url_for('logout') }}"
+       class="bg-red-100 text-red-700 px-4 py-2 rounded-xl hover:bg-red-200 transition">
+      Logout
+    </a>
   </div>
 </nav>
 
-<main class="max-w-6xl mx-auto px-8 py-16">
-  <div class="bg-white rounded-3xl shadow-xl p-10 border border-teal-100">
-    <h2 class="text-4xl font-bold text-gray-900 mb-4">Research & Experiments</h2>
+<main class="max-w-7xl mx-auto px-8 py-14">
 
-    <p class="text-gray-600 mb-8">
-      PCOSight was developed by comparing multiple machine learning and deep learning approaches for early PCOS risk prediction.
+  <!-- HERO -->
+  <section class="bg-white rounded-3xl shadow-xl border border-purple-100 p-10 mb-10">
+    <p class="text-sm uppercase tracking-widest text-teal-600 font-semibold mb-3">
+      Research Foundation
     </p>
 
+    <h2 class="text-4xl md:text-5xl font-extrabold text-gray-900 mb-5">
+      Research Behind PCOSight
+    </h2>
+
+    <p class="text-lg text-gray-600 max-w-4xl leading-relaxed">
+      PCOSight is built as an AI-powered decision support system for early PCOS risk prediction.
+      The research integrates clinical symptoms, lifestyle indicators, hormonal markers, machine learning,
+      deep learning, and transcriptomic insights to support explainable reproductive health screening.
+    </p>
+  </section>
+
+  <!-- RESEARCH PILLARS -->
+  <section class="grid md:grid-cols-4 gap-6 mb-10">
+    <div class="bg-purple-50 border border-purple-100 rounded-3xl p-6 shadow-sm">
+      <h3 class="text-xl font-bold text-purple-700 mb-2">Clinical Screening</h3>
+      <p class="text-sm text-gray-600 leading-relaxed">
+        Uses non-invasive features such as age, BMI, cycle regularity, acne, hair growth, weight gain,
+        skin darkening, fast food intake, and exercise habits.
+      </p>
+    </div>
+
+    <div class="bg-rose-50 border border-rose-100 rounded-3xl p-6 shadow-sm">
+      <h3 class="text-xl font-bold text-rose-700 mb-2">Advanced Markers</h3>
+      <p class="text-sm text-gray-600 leading-relaxed">
+        Adds biochemical and hormonal parameters including AMH, LH, FSH, LH/FSH ratio, TSH, PRL,
+        and random blood sugar.
+      </p>
+    </div>
+
+    <div class="bg-teal-50 border border-teal-100 rounded-3xl p-6 shadow-sm">
+      <h3 class="text-xl font-bold text-teal-700 mb-2">ML & DL Models</h3>
+      <p class="text-sm text-gray-600 leading-relaxed">
+        Logistic Regression, Random Forest, SVM, and ANN models were evaluated using accuracy and ROC-AUC.
+      </p>
+    </div>
+
+    <div class="bg-pink-50 border border-pink-100 rounded-3xl p-6 shadow-sm">
+      <h3 class="text-xl font-bold text-pink-700 mb-2">Molecular Insight</h3>
+      <p class="text-sm text-gray-600 leading-relaxed">
+        DEG analysis, GO/KEGG enrichment, Random Forest feature selection, clustering, and PPI networks
+        support biological interpretation.
+      </p>
+    </div>
+  </section>
+
+  <!-- METHODOLOGY -->
+  <section class="bg-white rounded-3xl shadow-xl border border-teal-100 p-10 mb-10">
+    <h3 class="text-3xl font-bold text-gray-900 mb-6">Methodology Overview</h3>
+
     <div class="grid md:grid-cols-2 gap-8">
-      <div class="p-6 bg-purple-50 rounded-2xl">
-        <h3 class="text-xl font-bold text-purple-700 mb-3">Basic Experiment</h3>
-        <p class="text-gray-600">
-          The basic setup uses easily available features such as age, BMI, menstrual cycle regularity, symptoms, fast food intake, and exercise habits.
+      <div>
+        <h4 class="text-xl font-bold text-purple-700 mb-3">1. Differential Gene Expression Analysis</h4>
+        <p class="text-gray-600 leading-relaxed mb-4">
+          RNA-seq datasets related to PCOS were analyzed using DESeq2. Low-count genes were filtered,
+          count data was normalized, and significant differentially expressed genes were identified using
+          adjusted p-value and log2 fold-change thresholds.
         </p>
+
+        <ul class="space-y-2 text-gray-600 text-sm">
+          <li>• GEO datasets used for PCOS-related transcriptomic analysis</li>
+          <li>• DESeq2-based normalization and differential expression testing</li>
+          <li>• Volcano plots, heatmaps, and quality assessment visualizations</li>
+          <li>• GO and KEGG enrichment for biological pathway interpretation</li>
+        </ul>
       </div>
 
-      <div class="p-6 bg-rose-50 rounded-2xl">
-        <h3 class="text-xl font-bold text-rose-700 mb-3">Advanced Experiment</h3>
-        <p class="text-gray-600">
-          The advanced setup includes additional hormonal and biochemical parameters such as AMH, LH, FSH, LH/FSH ratio, TSH, PRL, and RBS.
+      <div>
+        <h4 class="text-xl font-bold text-rose-700 mb-3">2. ML-Based Gene and Network Analysis</h4>
+        <p class="text-gray-600 leading-relaxed mb-4">
+          Random Forest feature selection was used to rank important DEGs. Clustering and network analysis
+          were then applied to understand expression structure and identify biologically relevant hub genes.
         </p>
-      </div>
 
-      <div class="p-6 bg-teal-50 rounded-2xl">
-        <h3 class="text-xl font-bold text-teal-700 mb-3">Models Tested</h3>
-        <p class="text-gray-600">
-          Logistic Regression, Random Forest, SVM, and Artificial Neural Networks were explored for risk prediction.
-        </p>
-      </div>
-
-      <div class="p-6 bg-pink-50 rounded-2xl">
-        <h3 class="text-xl font-bold text-pink-700 mb-3">Final Inference</h3>
-        <p class="text-gray-600">
-          The portal uses a Basic ANN model for basic prediction and an Advanced Random Forest model for advanced prediction.
-        </p>
+        <ul class="space-y-2 text-gray-600 text-sm">
+          <li>• Random Forest-based top DEG selection</li>
+          <li>• Hierarchical and K-means clustering</li>
+          <li>• STRING-based protein-protein interaction network construction</li>
+          <li>• Hub gene identification using network topology</li>
+        </ul>
       </div>
     </div>
-  </div>
+  </section>
+
+  <!-- PORTAL MODELS -->
+  <section class="bg-white rounded-3xl shadow-xl border border-purple-100 p-10 mb-10">
+    <h3 class="text-3xl font-bold text-gray-900 mb-6">Prediction Model Development</h3>
+
+    <div class="grid md:grid-cols-2 gap-8 mb-8">
+      <div class="bg-purple-50 rounded-3xl p-7 border border-purple-100">
+        <h4 class="text-2xl font-bold text-purple-700 mb-3">Basic Prediction Model</h4>
+        <p class="text-gray-600 leading-relaxed mb-5">
+          The basic model is designed for early, low-cost screening using only clinical, symptom-based,
+          and lifestyle inputs. It is suitable when hormonal or biochemical reports are not available.
+        </p>
+
+        <div class="bg-white rounded-2xl p-5">
+          <p class="text-sm text-gray-500 mb-1">Final model used in portal</p>
+          <p class="text-2xl font-bold text-purple-700">Logistic Regression</p>
+          <p class="text-sm text-gray-600 mt-2">Risk output: PCOS probability score</p>
+        </div>
+      </div>
+
+      <div class="bg-rose-50 rounded-3xl p-7 border border-rose-100">
+        <h4 class="text-2xl font-bold text-rose-700 mb-3">Advanced Prediction Model</h4>
+        <p class="text-gray-600 leading-relaxed mb-5">
+          The advanced model combines clinical symptoms with endocrine and biochemical markers to provide
+          a deeper prediction pathway for users with available lab values.
+        </p>
+
+        <div class="bg-white rounded-2xl p-5">
+          <p class="text-sm text-gray-500 mb-1">Final model used in portal</p>
+          <p class="text-2xl font-bold text-rose-700">Random Forest</p>
+          <p class="text-sm text-gray-600 mt-2">Risk output: PCOS probability score</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="bg-gray-100 text-gray-700">
+            <th class="p-4 rounded-l-xl">Model Group</th>
+            <th class="p-4">Best/Key Model</th>
+            <th class="p-4">Accuracy</th>
+            <th class="p-4 rounded-r-xl">ROC-AUC</th>
+          </tr>
+        </thead>
+
+        <tbody class="text-gray-600">
+          <tr class="border-b">
+            <td class="p-4 font-medium">Basic ML</td>
+            <td class="p-4">Logistic Regression</td>
+            <td class="p-4">87.2%</td>
+            <td class="p-4">0.902</td>
+          </tr>
+
+          <tr class="border-b">
+            <td class="p-4 font-medium">Advanced ML</td>
+            <td class="p-4">SVM / Random Forest</td>
+            <td class="p-4">86.2% / 83.5%</td>
+            <td class="p-4">0.886 / 0.890</td>
+          </tr>
+
+          <tr class="border-b">
+            <td class="p-4 font-medium">Basic ANN</td>
+            <td class="p-4">Shallow ANN</td>
+            <td class="p-4">82.6%</td>
+            <td class="p-4">0.906</td>
+          </tr>
+
+          <tr>
+            <td class="p-4 font-medium">Advanced ANN</td>
+            <td class="p-4">Shallow ANN</td>
+            <td class="p-4">84.4%</td>
+            <td class="p-4">0.866</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- PIPELINE -->
+  <section class="grid md:grid-cols-3 gap-6 mb-10">
+    <div class="bg-white rounded-3xl shadow-lg border border-purple-100 p-7">
+      <div class="w-12 h-12 bg-purple-100 text-purple-700 rounded-2xl flex items-center justify-center font-bold mb-4">
+        01
+      </div>
+      <h4 class="text-xl font-bold text-gray-900 mb-2">Input Collection</h4>
+      <p class="text-gray-600 text-sm leading-relaxed">
+        User enters clinical, lifestyle, and optional biochemical parameters through basic or advanced forms.
+      </p>
+    </div>
+
+    <div class="bg-white rounded-3xl shadow-lg border border-rose-100 p-7">
+      <div class="w-12 h-12 bg-rose-100 text-rose-700 rounded-2xl flex items-center justify-center font-bold mb-4">
+        02
+      </div>
+      <h4 class="text-xl font-bold text-gray-900 mb-2">Model Inference</h4>
+      <p class="text-gray-600 text-sm leading-relaxed">
+        The trained model processes standardized inputs and generates a PCOS probability score.
+      </p>
+    </div>
+
+    <div class="bg-white rounded-3xl shadow-lg border border-teal-100 p-7">
+      <div class="w-12 h-12 bg-teal-100 text-teal-700 rounded-2xl flex items-center justify-center font-bold mb-4">
+        03
+      </div>
+      <h4 class="text-xl font-bold text-gray-900 mb-2">Risk Interpretation</h4>
+      <p class="text-gray-600 text-sm leading-relaxed">
+        The portal displays the estimated probability visually to support early awareness and informed decision-making.
+      </p>
+    </div>
+  </section>
+
+  <!-- IMPORTANT NOTE -->
+  <section class="bg-gradient-to-r from-purple-700 to-rose-600 rounded-3xl shadow-xl p-10 mb-10 text-white">
+    <h3 class="text-3xl font-bold mb-4">Clinical Note</h3>
+    <p class="text-purple-50 leading-relaxed max-w-5xl">
+      PCOSight is intended as a decision-support and early screening tool. It does not replace professional
+      diagnosis, medical consultation, ultrasound findings, or laboratory interpretation by qualified healthcare
+      professionals.
+    </p>
+  </section>
+
+  <!-- CONTRIBUTORS -->
+  <section class="bg-white rounded-3xl shadow-xl border border-pink-100 p-10">
+    <h3 class="text-3xl font-bold text-gray-900 mb-6">Contributors</h3>
+
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="bg-purple-50 rounded-3xl p-6 border border-purple-100">
+        <p class="text-sm text-purple-600 font-semibold mb-1">Research Contributor</p>
+        <h4 class="text-2xl font-bold text-gray-900">Kamnaa</h4>
+      </div>
+
+      <div class="bg-rose-50 rounded-3xl p-6 border border-rose-100">
+        <p class="text-sm text-rose-600 font-semibold mb-1">Research Contributor</p>
+        <h4 class="text-2xl font-bold text-gray-900">Puneet</h4>
+      </div>
+
+      <div class="bg-teal-50 rounded-3xl p-6 border border-teal-100">
+        <p class="text-sm text-teal-600 font-semibold mb-1">Supervisor / Guide</p>
+        <h4 class="text-2xl font-bold text-gray-900">Prof. Anjali Priyadarshani</h4>
+      </div>
+    </div>
+  </section>
+
 </main>
+
+<footer class="text-center text-gray-500 text-sm py-8">
+  © 2026 PCOSight. AI-powered support for early PCOS risk awareness.
+</footer>
 
 </body>
 </html>
