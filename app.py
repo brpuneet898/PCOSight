@@ -12,7 +12,7 @@ from groq import Groq
 load_dotenv()
 groq_client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 GROQ_MODEL = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
-CHATBOT_MODEL = os.getenv("CHATBOT_MODEL", "llama-3.1-8b-instant")
+CHATBOT_MODEL = os.getenv("CHATBOT_MODEL", "llama-3.3-70b-versatile")
 
 app = Flask(__name__)
 
