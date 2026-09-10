@@ -1,69 +1,99 @@
-# README.md
-
 # PCOSight
 
-An AI-powered decision support tool for early PCOS risk prediction and reproductive health assessment.
+PCOSight is research and educational decision-support software for PCOS risk screening. It estimates PCOS risk from clinical, lifestyle, hormonal, and biochemical inputs using saved machine learning models, then presents the result through a Flask web application.
 
-PCOSight utilizes machine learning and deep learning models to analyze clinical, lifestyle, and hormonal parameters for estimating PCOS risk. The platform provides explainable predictions, personalized recommendations, and educational insights to support early screening and informed healthcare decisions.
+The scientifically evaluated risk-estimation models are separate from the Groq-powered recommendation and CareChat features. Groq is used only as an auxiliary education and interpretation layer; it is not part of the validated PCOS risk-prediction algorithm.
 
----
+## Key Features
 
-## Features
+- Basic PCOS risk screening using clinical and lifestyle indicators
+- Advanced PCOS risk estimation using hormonal and biochemical markers
+- Saved machine learning inference assets for reproducible prediction
+- Groq-generated recommendation summaries as auxiliary educational support
+- PCOS CareChat for general PCOS and reproductive-health education
+- User registration, login, dashboard, and saved prediction results
+- Research and methodology section connected to the underlying academic work
+- Automated tests covering model loading, input validation, prediction, and routes
 
-- Basic PCOS risk prediction using clinical and lifestyle parameters
-- Advanced prediction using hormonal and biochemical markers
-- AI-generated personalized recommendations
-- PCOS CareChat assistant powered by Groq LLMs
-- Research and methodology exploration section
-- User authentication system using Flask and SQLite
-- Clean responsive UI using Tailwind CSS
+## Important Medical Notice
 
----
+PCOSight is not a diagnostic medical device and does not diagnose PCOS or any other condition. It is research/educational software intended for risk screening, risk estimation, and decision-support only.
 
-## Tech Stack
+Prediction results should not be used as a substitute for professional medical advice, diagnosis, or treatment. Users should consult a qualified healthcare professional for clinical evaluation, interpretation of symptoms, laboratory findings, and treatment decisions.
 
-### Frontend
-- HTML
-- Tailwind CSS
-- JavaScript
+## Research Provenance
 
-### Backend
-- Flask
-- SQLite
-- Groq API
+PCOSight originates from academic research and experimentation performed for PCOS risk screening. The software connects the research workflow, trained model artifacts, and web-based inference interface into a reproducible software artifact.
 
-### Machine Learning
-- Logistic Regression
-- Random Forest
-- Support Vector Machine
-- Artificial Neural Network (ANN)
+The research notebooks and dataset resources are kept in the `Experiments/` directory. The production application uses serialized model assets from `saved_models/` for inference. Any Open Source Paper or software publication for PCOSight should be understood as a publication about the software artifact, its implementation, and its usability as research software, rather than a reproduction of thesis chapters.
 
----
+## Technology Stack
 
-## Environment Variables
+**Frontend:** HTML, Tailwind CSS, JavaScript
 
-Create a `.env` file in the root directory and add the following:
+**Backend:** Flask, Flask-SQLAlchemy, SQLite
 
-```env
-SECRET_KEY=
-GROQ_API_KEY=
-GROQ_MODEL=llama-3.3-70b-versatile
-CHATBOT_MODEL=llama-3.1-8b-instant
+**Machine Learning:** scikit-learn, pandas, joblib
+
+**LLM Assistance:** Groq API for recommendations and CareChat education
+
+## Project Structure
+
+```text
+PCOSight/
+|-- app.py
+|-- models.py
+|-- requirements.txt
+|-- README.md
+|-- software_documentation.md
+|-- saved_models/
+|   |-- basic_lr_model.pkl
+|   |-- basic_lr_scaler.pkl
+|   |-- basic_lr_features.pkl
+|   |-- basic_ann_model.h5
+|   |-- basic_ann_scaler.pkl
+|   |-- basic_ann_features.pkl
+|   |-- advanced_rf_model.pkl
+|   `-- advanced_rf_features.pkl
+|-- templates/
+|   |-- index.html
+|   |-- register.html
+|   |-- login.html
+|   |-- dashboard.html
+|   |-- basic.html
+|   |-- advanced.html
+|   |-- research.html
+|   `-- chatbot.html
+|-- tests/
+|   |-- run_tests.py
+|   |-- test_pcosight.py
+|   `-- test_results.md
+|-- Experiments/
+|   |-- PCOS_Dataset.csv
+|   |-- PCOS_Risk_Prediction.ipynb
+|   `-- PCOS_Risk_Prediction_Inference.ipynb
+|-- images/
+`-- instance/
 ```
 
----
+## Setup
 
-## Installation
+Create and activate a Python environment, then install dependencies:
 
 ```bash
-git clone https://github.com/brpuneet898/PCOSight.git
-
-cd PCOSight
-
 pip install -r requirements.txt
 ```
 
----
+Create a `.env` file in the project root:
+
+```env
+SECRET_KEY=your-secret-key
+GROQ_API_KEY=your-groq-api-key
+GROQ_MODEL=llama-3.3-70b-versatile
+CHATBOT_MODEL=llama-3.3-70b-versatile
+```
+
+`GROQ_API_KEY` is required for the recommendation and CareChat features. The saved machine learning prediction models are separate from Groq.
 
 ## Run The Application
 
@@ -71,184 +101,63 @@ pip install -r requirements.txt
 python app.py
 ```
 
-Open browser:
+Open:
 
-```bash
+```text
 http://127.0.0.1:5000
 ```
 
----
+## Run Tests
 
-# Application Screenshots
+From the project root:
 
-## Explore Page
+```powershell
+env\Scripts\python.exe tests\run_tests.py
+```
+
+The current automated test suite covers model loading, prediction output ranges, missing input fields, authentication redirects, form validation, and basic/advanced prediction route pipelines.
+
+Latest recorded result:
+
+```text
+Tests run: 11
+Failures:  0
+Errors:    0
+Result:    PASS
+```
+
+## Application Screenshots
+
+### Explore Page
 
 ![Explore](images/explore.png)
 
----
-
-## Login Page
+### Login Page
 
 ![Login](images/login.png)
 
----
-
-## Dashboard
+### Dashboard
 
 ![Dashboard](images/dashboard.png)
 
----
-
-## Basic Prediction
+### Basic Prediction
 
 ![Basic Prediction](images/basic_prediction.png)
 
----
-
-## Research Page
+### Research Page
 
 ![Research](images/research.png)
 
----
-
-## PCOS CareChat
+### PCOS CareChat
 
 ![CareChat](images/carechat.png)
 
----
+## Contributors
 
-# Project Structure
+**Kamnaa** - Lead researcher for PCOSight, responsible for experimentation, feature analysis, model evaluation, and research workflow design.
 
-```bash
-PCOSight/
-│
-├── app.py
-├── models.py
-├── requirements.txt
-├── .env
-├── database.db
-│
-├── saved_models/
-│   ├── basic_lr_model.pkl
-│   ├── basic_lr_scaler.pkl
-│   ├── basic_lr_features.pkl
-│   ├── advanced_model.pkl
-│   └── ...
-│
-├── templates/
-│   ├── index.html
-│   ├── login.html
-│   ├── register.html
-│   ├── dashboard.html
-│   ├── basic.html
-│   ├── advanced.html
-│   ├── research.html
-│   └── chatbot.html
-│
-├── static/
-│   ├── css/
-│   └── js/
-│
-└── images/
-    ├── explore.png
-    ├── login.png
-    ├── dashboard.png
-    ├── basic_prediction.png
-    ├── research.png
-    └── carechat.png
-```
+**Puneet** - Developer and research engineer responsible for software implementation, Flask application development, model integration, and documentation.
 
----
-
-# AI Models Used
-
-## Basic Prediction Model
-Uses:
-- Age
-- BMI
-- Cycle regularity
-- Pimples
-- Hair growth
-- Hair loss
-- Weight gain
-- Skin darkening
-- Fast food intake
-- Exercise habits
-
-## Advanced Prediction Model
-Uses:
-- AMH
-- LH
-- FSH
-- LH/FSH ratio
-- TSH
-- PRL
-- RBS
-- Additional clinical parameters
-
----
-
-# AI Recommendation Engine
-
-After prediction, PCOSight generates:
-- What you are doing good
-- What needs attention
-- How to improve
-
-Recommendations are generated using:
-- Groq Llama 3.3 70B Versatile
-
----
-
-# PCOS CareChat
-
-PCOS CareChat is a lightweight conversational assistant designed for:
-- PCOS awareness
-- Lifestyle guidance
-- Symptom-related educational support
-- Reproductive health information
-
-Model Used:
-- Llama 3.1 8B Instant
-
-Note:
-- Chats are not stored
-- Session history is cleared automatically
-
----
-
-# Research Foundation
-
-PCOSight integrates:
-- Clinical screening
-- Lifestyle indicators
-- Hormonal biomarkers
-- Machine learning
-- Deep learning
-- Molecular interpretation techniques
-
----
-
-# Contributors
-
-## Kamnaa
-
-Lead Researcher for PCOSight. Responsible for experimentation, feature analysis, model evaluation, and research workflow design.
-
-## Puneet
-
-Developer and Research Engineer behind PCOSight.
-
----
-
-# Disclaimer
-
-PCOSight is an educational and screening-support platform only. It is not a replacement for professional medical diagnosis, treatment, or clinical consultation.
-
-Always consult a qualified healthcare professional for medical advice.
-
----
-
-# License
+## License
 
 This project is licensed under the MIT License.
