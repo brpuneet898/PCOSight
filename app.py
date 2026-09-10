@@ -25,9 +25,6 @@ db.init_app(app)
 with app.app_context():
     db.create_all()
 
-
-# ---------------- MODEL LOADING ----------------
-
 basic_model = None
 basic_scaler = None
 basic_features = None
@@ -134,9 +131,6 @@ Rules:
             "improve": ["Use this result as screening support and consult a doctor for confirmation."]
         }
 
-
-# ---------------- HELPERS ----------------
-
 def login_required(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
@@ -198,9 +192,6 @@ def get_prediction(user_id, prediction_type):
         "recommendations": recommendations,
         "updated_at": result.updated_at
     }
-
-
-# ---------------- ROUTES ----------------
 
 @app.route("/")
 def index():
