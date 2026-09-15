@@ -494,3 +494,6 @@ PCOSight is licensed under the MIT License. See `LICENSE` for the full license t
 Kamnaa led the research workflow, experimentation, feature analysis, and model evaluation.
 
 Puneet developed the software artifact, Flask application, model integration, testing support, and documentation.
+
+Prof. Anjali Priyadarshani - Conceptualization, reproductive-biology interpretation, scientific supervision, methodology, critical review and editing, and project supervision.
+
