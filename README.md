@@ -154,6 +154,8 @@ Result:    PASS
 
 ## Contributors
 
+**Prof. Anjali Priyadarshani** - Conceptualization, reproductive-biology interpretation, scientific supervision, methodology, critical review and editing, and project supervision.
+
 **Kamnaa** - Lead researcher for PCOSight, responsible for experimentation, feature analysis, model evaluation, and research workflow design.
 
 **Puneet** - Developer and research engineer responsible for software implementation, Flask application development, model integration, and documentation.
